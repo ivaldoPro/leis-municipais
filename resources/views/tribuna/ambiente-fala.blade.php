@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">Falando agora: </h1>
+            <h1 class="card-title">Falando agora: {{ $vereador->nome }}, {{ $vereador->partido }}</h1>
             <h2 class="card-title">Motivo: {{ $infoTribuna->motivo }}</h2>
             <div class="col-md-12">
                 <div
@@ -14,7 +14,6 @@
                             @else
                                 <img src="{{ url('/img/user-not-found.png') }}">
                             @endif
-                            <label class="up-text">{{ $vereador->nome }}, {{ $vereador->partido }}</label>
                         </li>
                     </ul>
                 </div>

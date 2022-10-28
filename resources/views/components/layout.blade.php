@@ -7,7 +7,7 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
     <title>
-        Login | Leis Municipais
+        Login | Câmara Municipal
     </title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/66c16fc52c.js" crossorigin="anonymous"></script>

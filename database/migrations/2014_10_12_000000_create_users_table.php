@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('perfil')->nullable();
             $table->integer('status')->nullable();
+            $table->integer('municipio');
             $table->timestamps();
         });
     }

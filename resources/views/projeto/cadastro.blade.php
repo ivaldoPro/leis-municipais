@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="container-fluid py-4">
-        <form action="{{ route('salvar.projeto') }}" method="post">
+        <form action="{{ route('salvar.projeto') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-12">
@@ -27,7 +27,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <input class="form-control" type="hidden" name="status" value="1">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="form-control-label">Título</label>
@@ -62,18 +61,43 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label">Data para votação</label>
                                         <input class="form-control" type="date" name="dataVotacao" autocomplete="off"
                                             required>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Ano</label>
+                                        <input class="form-control" type="text" name="ano" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Descrição</label>
-                                        <textarea class="form-control" name="descricao" autocomplete="off"></textarea>
+                                        <textarea class="form-control" id="descricao" name="descricao" autocomplete="off" maxlength="2500"></textarea>
+                                        <p><label class="info"></label>
+                                        </p>
                                     </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="documento" class="form-label">Documento</label>
+                                        <input class="form-control" id="documento" name="documento" type="file">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="municipio" class="form-label">Município</label>
+                                    <select class="form-control" id="municipio" name="municipio" required>
+                                        <option value="0">Selecione</option>
+                                        @foreach ($listMunicipios as $municipio)
+                                            <option value="{{ $municipio->id }}">{{ $municipio->municipio }},
+                                                {{ $municipio->uf }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <hr class="horizontal dark">

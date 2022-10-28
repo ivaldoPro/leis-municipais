@@ -20,7 +20,10 @@ return new class extends Migration
             $table->integer('autor');
             $table->date('dataVotacao');
             $table->integer('status');
-            $table->string('descricao');
+            $table->string('descricao', 2500);
+            $table->string('documento')->nullable();
+            $table->string('ano');
+            $table->integer('municipio');
             $table->timestamps();
         });
     }

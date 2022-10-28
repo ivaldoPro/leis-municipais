@@ -7,7 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
-    <title>Leis Municipais</title>
+    @if (Auth::user()->perfil == 1)
+        <title>Câmara Municipal</title>
+    @else
+        <title>Câmara de {{ App\Models\Municipio::buscarPorId(Auth::user()->municipio) }}</title>
+    @endif
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
@@ -21,8 +25,12 @@
     <div class="wrapper">
         <div class="sidebar">
             <div class="logo">
-                <a href="#" class="simple-text logo-normal">
-                    Leis Municipais
+                <a href="{{ route('dashboard') }}" class="simple-text logo-normal">
+                    @if (Auth::user()->perfil == 1)
+                        Câmara Municipal
+                    @else
+                        Câmara
+                    @endif
                 </a>
             </div>
             <div class="sidebar-wrapper">
@@ -35,13 +43,26 @@
                     </li>
                     @if (Auth::user()->perfil == 1)
                         <li
-                            class="{{ request()->routeIs('listagem.indicacao') || request()->routeIs('cadastro.indicacao') ? 'active' : '' }}">
-                            <a href="{{ route('listagem.indicacao') }}">
+                            class="nav-item has-submenu {{ request()->routeIs('listagem.indicacao') ||
+                            request()->routeIs('cadastro.indicacao') ||
+                            request()->routeIs('organica.listagem')
+                                ? 'active'
+                                : '' }}">
+
+                            <a class="nav-link" href="#">
                                 <i class="fa-solid fa-gavel" style="font-size: 15px;"></i>
-                                <p>Indicação</p>
+                                <p>Leis</p>
                             </a>
+                            <ul class="submenu collapse">
+                                <li><a class="nav-link" href="{{ route('listagem.indicacao') }}">Leis
+                                        Municipais</a></li>
+                                <li><a class="nav-link" href="{{ route('organica.listagem') }}">Leis Orgânicas </a></li>
+                                <li><a class="nav-link" href="{{ route('regimento.listagem') }}">Regimento Interno </a>
+                                </li>
+                            </ul>
                         </li>
                     @endif
+
                     @if (Auth::user()->perfil == 1)
                         <li
                             class="{{ request()->routeIs('listagem.vereadores') || request()->routeIs('cadastro.vereadores') ? 'active' : '' }}">
@@ -91,6 +112,15 @@
                             </a>
                         </li>
                     @endif
+                    @if (Auth::user()->perfil == 1)
+                        <li
+                            class="{{ request()->routeIs('municipio.listagem') || request()->routeIs('municipio.cadastro') ? 'active' : '' }}">
+                            <a href="{{ route('municipio.listagem') }}">
+                                <i class="fa-solid fa-map" style="font-size: 15px;"></i>
+                                <p>Municípios</p>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -119,12 +149,14 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <p>Olá, {{ Auth::user()->name }}</p> &nbsp;&nbsp;<i class="fa-solid fa-user"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <div class="dropdown-menu dropdown-menu-right"
+                                    aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ route('alterar.senha') }}">Alterar a
                                         senha</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}">Sair</a>
                                 </div>
                             </li>
+
                         </ul>
                     </div>
                 </div>
@@ -154,7 +186,7 @@
                 @endif
                 @yield('content')
             </div>
-            <footer class="footer footer-black  footer-white ">
+            <footer class="footer footer-black footer-white">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="credits ml-auto">
@@ -184,6 +216,64 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
                 }
             });
+        });
+
+        $(document).on("input", "#biografia", function() {
+            var limite = 5000;
+            var informativo = "caracteres restantes.";
+            var caracteresDigitados = $(this).val().length;
+            var caracteresRestantes = limite - caracteresDigitados;
+
+            if (caracteresRestantes <= 0) {
+                var biografia = $("textarea[name=biografia]").val();
+                $("textarea[name=biografia]").val(biografia.substr(0, limite));
+                $(".info").text("0 " + informativo);
+            } else {
+                $(".info").text(caracteresRestantes + " " + informativo);
+            }
+        });
+
+        $(document).on("input", "#descricao", function() {
+            var limite = 2500;
+            var informativo = "caracteres restantes.";
+            var caracteresDigitados = $(this).val().length;
+            var caracteresRestantes = limite - caracteresDigitados;
+
+            if (caracteresRestantes <= 0) {
+                var descricao = $("textarea[name=descricao]").val();
+                $("textarea[name=descricao]").val(descricao.substr(0, limite));
+                $(".info").text("0 " + informativo);
+            } else {
+                $(".info").text(caracteresRestantes + " " + informativo);
+            }
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.sidebar .nav-link').forEach(function(element) {
+
+                element.addEventListener('click', function(e) {
+
+                    let nextEl = element.nextElementSibling;
+                    let parentEl = element.parentElement;
+
+                    if (nextEl) {
+                        e.preventDefault();
+                        let mycollapse = new bootstrap.Collapse(nextEl);
+
+                        if (nextEl.classList.contains('show')) {
+                            mycollapse.hide();
+                        } else {
+                            mycollapse.show();
+                            // find other submenus with class=show
+                            var opened_submenu = parentEl.parentElement.querySelector(
+                                '.submenu.show');
+                            // if it exists, then close all of them
+                            if (opened_submenu) {
+                                new bootstrap.Collapse(opened_submenu);
+                            }
+                        }
+                    }
+                }); // addEventListener
+            }) // forEach
         });
     </script>
 </body>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Indicacao;
+use App\Models\Municipio;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -11,22 +12,39 @@ class IndicacaoController extends Controller
 {
 
     public function toListagemIndicacao(){
-        $listIndicacoes = DB::table('indicacao')
-            ->join('status', 'indicacao.status', '=', 'status.id')
-            ->join('vereadores', 'indicacao.autor', '=', 'vereadores.id')
-            ->select('indicacao.*', 'vereadores.nome as nomeAutor', 'status.descricao as statusDescricao')
-            ->get();
+        $listIndicacoes = Indicacao::getListagemIndicacoes();
             
         return view('indicacao.listagem', ['listIndicacoes' => $listIndicacoes]);
     }
 
     public function toCadastroIndicacao(){
         $listVereadores = DB::table('vereadores')->get();
-        return view('indicacao.cadastro', ['listVereadores' => $listVereadores]);
+        $listMunicipios = Municipio::get();
+
+        return view('indicacao.cadastro', ['listVereadores' => $listVereadores, 'listMunicipios' => $listMunicipios]);
     }
 
     public function salvar(Request $request){
-        Indicacao::create($request->all());
+        if ($request->hasFile('documento') && $request->file('documento')->isValid()){
+            $requestDocument = $request->documento;
+            $extension = $requestDocument->extension();
+            $nameFile = $request->tituloIndicacao . "_" . $request->numeroIndicacao . "." . $extension;
+            $request -> documento -> move(public_path('arquivos/documentos'), $nameFile);
+            $request -> documento = $nameFile;     
+        }
+
+        Indicacao::create([
+            'tituloIndicacao' => $request->tituloIndicacao,
+            'numeroIndicacao' => $request->numeroIndicacao,
+            'autor' => $request->autor,
+            'dataVotacao' => $request->dataVotacao,
+            'status' => 3,
+            'descricao' => $request->descricao,
+            'documento' => $request->documento,
+            'ano' => $request->ano,
+            'municipio' => $request->municipio,
+        ]);
+
         return redirect()->route('listagem.indicacao')->with('message-success-indicacao', 'Indicação cadastrada com sucesso, aguarde o dia da votação!');
     }
 

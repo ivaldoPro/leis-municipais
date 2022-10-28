@@ -8,17 +8,16 @@
         </div>
     </div>
     <div class="container-fluid py-4">
-        <form action="{{ route('salvar.indicacao') }}" method="post">
+        <form action="{{ route('salvar.indicacao') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="text-sm">Cadastro de Indicações</h6>
+                            <h6 class="text-sm">Cadastro de Leis Municipais</h6>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input class="form-control" type="hidden" name="status" value="3">
                                         <label class="form-control-label">Titulo</label>
                                         <input class="form-control" type="text" name="tituloIndicacao" autocomplete="off"
                                             required>
@@ -31,7 +30,7 @@
                                             required>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Autor</label>
                                         <select class="form-control" name="autor" required>
@@ -42,17 +41,43 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <label for="municipio" class="form-label">Município</label>
+                                    <select class="form-control" id="municipio" name="municipio" required>
+                                        <option value="0">Selecione</option>
+                                        @foreach ($listMunicipios as $municipio)
+                                            <option value="{{ $municipio->id }}">{{ $municipio->municipio }},
+                                                {{ $municipio->uf }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Data para votação</label>
                                         <input class="form-control" type="date" name="dataVotacao" autocomplete="off"
                                             required>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Ano</label>
+                                        <input class="form-control" type="text" name="ano" autocomplete="off"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Descrição</label>
-                                        <textarea class="form-control" name="descricao" autocomplete="off" required></textarea>
+                                        <textarea class="form-control" id="descricao" name="descricao" autocomplete="off" maxlength="2500" required></textarea>
+                                        <p><label class="info"></label>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="documento" class="form-label">Documento</label>
+                                        <input class="form-control" id="documento" name="documento" type="file">
                                     </div>
                                 </div>
                             </div>

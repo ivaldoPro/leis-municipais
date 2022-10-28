@@ -20,6 +20,16 @@
             </div>
         </div>
     @endif
+    @if (session('message-success-update-dados-vereadores'))
+        <div class="col-md-12">
+            <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span class="span-alert">{{ session('message-success-update-dados-vereadores') }}</span>
+            </div>
+        </div>
+    @endif
     <div class="col-md-12">
         <div class="d-flex justify-content-end">
             <a href="{{ route('cadastro.vereadores') }}" class="btn btn-secondary btn-sm ms-auto">Cadastrar <i
@@ -55,6 +65,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <a href="{{ route('edit.vereadores', $vereador->id) }}" type="button"
+                                            class="btn btn-success btn-group-table" title="Editar Vereador"><i
+                                                class="fa-solid fa-edit"></i></a>
                                         @if ($vereador->status == 1)
                                             <a href="{{ route('vereador.status', $vereador->id) }}" type="button"
                                                 class="btn btn-danger btn-group-table" title="Inativar vereador"><i

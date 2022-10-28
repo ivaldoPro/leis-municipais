@@ -51,6 +51,8 @@
                             <th>Título</th>
                             <th>Autor</th>
                             <th>Categoria</th>
+                            <th>Documento</th>
+                            <th>Ano</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </thead>
@@ -63,6 +65,15 @@
                                     <td>{{ $projeto->titulo }}</td>
                                     <td>{{ $projeto->nomeVereador }}</td>
                                     <td>{{ $projeto->nomeCategoria }}</td>
+                                    <td>
+                                        @if ($projeto->documento)
+                                            <a href="{{ url('/arquivos/documentos/' . $projeto->documento) }}"
+                                                target="_blank">Documento</a>
+                                        @else
+                                            Nenhum documento foi anexado
+                                        @endif
+                                    </td>
+                                    <td>{{ $projeto->ano }}</td>
                                     <td class="up-text">
                                         @if ($projeto->status == 1)
                                             <span class="badge badge-success">{{ $projeto->descricaoStatus }}</span>

@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('indicacoes_votadas', function (Blueprint $table) {
+        Schema::create('organica', function (Blueprint $table) {
             $table->id();
-            $table->string('indicacao');
-            $table->string('votador');
-            $table->timestamp('dataVotado');
-            $table->integer('voto');
+            $table->string('documento');
+            $table->integer('municipio');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('indicacoes_votadas');
+        Schema::dropIfExists('organica');
     }
 };

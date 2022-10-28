@@ -14,8 +14,9 @@ class DashboardController extends Controller
 {
     public function dashboard(){
         $date = Carbon::now();
+        $listIndicacoes = null;
         $listIndicacaoAlterarStatus = DB::table('indicacao')->where('dataVotacao', $date->toDateString())->get();
-
+        
         foreach($listIndicacaoAlterarStatus as $indicacao){
             if($indicacao->status == 3){
                 $indicacaoBanco = Indicacao::find($indicacao->id);
@@ -23,12 +24,11 @@ class DashboardController extends Controller
             }
         }
 
-        $listIndicacoes = DB::table('indicacao')
-            ->join('status', 'indicacao.status', '=', 'status.id')
-            ->join('vereadores', 'indicacao.autor', '=', 'vereadores.id')
-            ->select('indicacao.*', 'vereadores.nome as nomeAutor', 'status.descricao as statusDescricao')
-            ->where('dataVotacao', $date->toDateString())
-            ->get();
+        if(Auth::user()->perfil == 1){
+            $listIndicacoes = Indicacao::getIndicacoesParaVotacao($date);
+        }else{
+            $listIndicacoes = Indicacao::getIndicacoesParaVotacaoPorMunicipio($date, Auth::user()->municipio);
+        }
 
         return view('dashboard', [
             'listIndicacoes' => $listIndicacoes, 

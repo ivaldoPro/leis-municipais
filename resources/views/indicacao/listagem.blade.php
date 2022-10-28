@@ -29,7 +29,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Listagem de Indicações</h4>
+                <h4 class="card-title">Listagem de Leis Municipais</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -39,6 +39,8 @@
                             <th>Número</th>
                             <th>Autor</th>
                             <th>Data da Votação</th>
+                            <th>Documento</th>
+                            <th>Ano</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </thead>
@@ -49,6 +51,15 @@
                                     <td>{{ $indicacao->numeroIndicacao }}</td>
                                     <td>{{ $indicacao->nomeAutor }}</td>
                                     <td>{{ date('d/m/Y', strtotime($indicacao->dataVotacao)) }}</td>
+                                    <td>
+                                        @if ($indicacao->documento)
+                                            <a href="{{ url('/arquivos/documentos/' . $indicacao->documento) }}"
+                                                target="_blank">Documento</a>
+                                        @else
+                                            Nenhum documento foi anexado
+                                        @endif
+                                    </td>
+                                    <td>{{ $indicacao->ano }}</td>
                                     <td class="up-text"><span
                                             class="badge badge-info">{{ $indicacao->statusDescricao }}</span></td>
                                     <td>
@@ -59,9 +70,9 @@
                                                         class="fa-solid fa-check"></i></a>
                                             @else
                                                 @if (!$indicacao->status == 5)
-                                                    <a href="{{ route('indicacao.status', $indicacao->id) }}" type="button"
-                                                        class="btn btn-success btn-group-table" title="Ativar indicação"><i
-                                                            class="fa-solid fa-check"></i></a>
+                                                    <a href="{{ route('indicacao.status', $indicacao->id) }}"
+                                                        type="button" class="btn btn-success btn-group-table"
+                                                        title="Ativar indicação"><i class="fa-solid fa-check"></i></a>
                                                 @endif
                                             @endif
                                         @endif

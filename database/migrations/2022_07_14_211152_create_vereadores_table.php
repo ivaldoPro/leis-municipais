@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('status');
             $table->string('email')->unique();
             $table->string('imagem')->nullable();
+            $table->string('biografia', 5000);
+            $table->integer('municipio');
             $table->timestamps();
         });
     }

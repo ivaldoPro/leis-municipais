@@ -18,73 +18,89 @@
         </div>
     </div>
     <div class="container-fluid py-4">
-        <form action="{{ route('salvar.vereadores') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('update.vereadores') }}" method="post" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="text-sm">Cadastro de Vereadores</h6>
+                            <h6 class="text-sm">Edição de Vereadores</h6>
                             <div class="row">
+                                <input type="hidden" name="id" value="{{ $vereador->id }}">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Nome</label>
-                                        <input class="form-control" type="text" name="nome"
-                                            placeholder="Ex: Ana Silva" autocomplete="off" required>
+                                        <input class="form-control" type="text" name="nome" autocomplete="off"
+                                            required value="{{ $vereador->nome }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Apelido</label>
-                                        <input class="form-control" type="text" name="apelido" placeholder="Ex: Aninha"
-                                            autocomplete="off" required>
+                                        <input class="form-control" type="text" name="apelido" autocomplete="off"
+                                            required value="{{ $vereador->apelido }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Partido</label>
-                                        <input class="form-control" type="text" name="partido" placeholder="Ex: PT"
-                                            autocomplete="off" required>
+                                        <input class="form-control" type="text" name="partido" autocomplete="off"
+                                            required value="{{ $vereador->partido }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Cargo</label>
-                                        <input class="form-control" type="text" name="cargo"
-                                            placeholder="Ex: Presidente" autocomplete="off" required>
+                                        <input class="form-control" type="text" name="cargo" autocomplete="off"
+                                            required value="{{ $vereador->cargo }}">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Email</label>
-                                        <input class="form-control" type="email" name="email"
-                                            placeholder="Ex: anasilva@gmail.com" autocomplete="off" required>
+                                        <input class="form-control" type="email" name="email" autocomplete="off"
+                                            required value="{{ $vereador->email }}">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="imagem" class="form-label">Foto</label>
-                                        <input class="form-control" id="imagem" name="imagem" type="file">
-                                    </div>
+                                <div class="col-md-3">
+                                    <label for="municipio" class="form-label">Município</label>
+                                    <select class="form-control" id="municipio" name="municipio" required>
+                                        <option value="0">Selecione</option>
+                                        @foreach ($listMunicipios as $municipio)
+                                            @if ($municipio->id == $vereador->id)
+                                                <option selected value="{{ $municipio->id }}">{{ $municipio->municipio }},
+                                                    {{ $municipio->uf }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $municipio->id }}">{{ $municipio->municipio }},
+                                                    {{ $municipio->uf }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="biografia" class="form-label">Biografia</label>
-                                        <textarea class="form-control" name="biografia" id="biografia" maxlength="5000" cols="30" rows="10" required></textarea>
+                                        <textarea class="form-control" name="biografia" id="biografia" maxlength="5000" cols="30" rows="10" required>{{ $vereador->biografia }}</textarea>
                                         <p><label class="info"></label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="municipio" class="form-label">Município</label>
-                                    <select class="form-control" id="municipio" name="municipio" required>
-                                        <option value="0">Selecione</option>
-                                        @foreach ($listMunicipios as $municipio)
-                                            <option value="{{ $municipio->id }}">{{ $municipio->municipio }},
-                                                {{ $municipio->uf }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="form-group">
+                                        <label for="biografia" class="form-label">Foto atual</label>
+                                        <div>
+                                            <img class="foto-edit" src="{{ url('/img/events/' . $vereador->imagem) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="imagem" class="form-label">Nova Foto</label>
+                                        <input class="form-control" id="imagem" name="imagem" type="file">
+                                    </div>
                                 </div>
                             </div>
                             <hr class="horizontal dark">
@@ -93,8 +109,6 @@
                                     <div class="d-flex justify-content-end">
                                         <button class="btn btn-success btn-sm ms-auto">Salvar <i
                                                 class="fa-solid fa-check"></i></button>
-                                        <button class="btn btn-warning btn-sm ms-auto" type="reset">Limpar <i
-                                                class="fa-solid fa-trash"></i></button>
                                     </div>
                                 </div>
                             </div>

@@ -5577,3 +5577,19 @@ ul.polaroids a:after {
 .up-text {
     text-transform: uppercase;
 }
+.nav-treeview {
+    padding: 0;
+}
+
+.foto-edit {
+    width: 300px;
+    height: 300px;
+}
+
+.sidebar li .submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
